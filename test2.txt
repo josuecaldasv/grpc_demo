@@ -1,0 +1,19 @@
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --partition=gpu
+#SBATCH --ntasks=1
+#SBATCH --mem=7500
+#SBATCH --gres=gpu:1
+#SBATCH --oversubscribe
+#SBATCH --ntasks-per-node=1
+#SBATCH -J nome_do_arquivo.srm
+
+cd $SLURM_SUBMIT_DIR
+NODES=$(scontrol show hostname $SLURM_JOB_NODELIST)
+
+#Exibe os nós alocados para o Job
+echo -e "\n## Job iniciado em $(date '+%d-%m-%Y %T') ##################\n"
+
+echo -e "\nHostname: $(hostname)\n\n"
+
+singularity run -B /share_zeta --nv grpc_singularity.sif python server.py
